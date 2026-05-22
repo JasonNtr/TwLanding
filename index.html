@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SniperBot</title>
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700;800&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #070605;
+            --gold-primary: #c9a054;
+            --gold-glow: #e5c17b;
+            --text-main: #e6e3df;
+            --text-muted: #8c867c;
+            --font-serif: 'Cinzel', serif;
+            --font-sans: 'Outfit', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at center, rgba(30, 24, 18, 0.45) 0%, transparent 65%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+        }
+
+        /* Ambient embers floating up */
+        .ember {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--gold-glow);
+            border-radius: 50%;
+            filter: blur(0.5px);
+            animation: float-up 14s infinite ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) translateX(0) scale(1); opacity: 0; }
+            30% { opacity: 0.4; }
+            70% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) translateX(80px) scale(0.4); opacity: 0; }
+        }
+
+        /* Centered presentation card */
+        .splash-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            padding: 40px;
+            animation: fade-in 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            cursor: default;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Floating Axe container */
+        .axe-container {
+            position: relative;
+            margin-bottom: 40px;
+            animation: float 6s infinite ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            height: 300px;
+        }
+
+        .axe-image {
+            width: 220px;
+            height: auto;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 45px rgba(201, 160, 84, 0.45));
+            transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .axe-container::before {
+            content: '';
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201, 160, 84, 0.16) 0%, transparent 70%);
+            filter: blur(15px);
+            z-index: -1;
+        }
+
+        /* Interactive hover states */
+        .splash-card:hover .axe-image {
+            transform: scale(1.06) rotate(1deg);
+            filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 65px rgba(201, 160, 84, 0.65));
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1.5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Typography */
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+            background: linear-gradient(to bottom, #ffffff 40%, #e3dcd1 70%, var(--gold-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-family: var(--font-serif);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            opacity: 0.75;
+            transition: opacity 0.5s ease, color 0.5s ease;
+        }
+
+        .splash-card:hover p {
+            opacity: 1;
+            color: var(--gold-glow);
+        }
+
+        /* Subtly animated light sweep across the heading */
+        h1::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+            margin: 18px auto 0;
+            opacity: 0.5;
+            box-shadow: 0 0 8px var(--gold-glow);
+            transition: width 0.5s ease, opacity 0.5s ease;
+        }
+
+        .splash-card:hover h1::after {
+            width: 100px;
+            opacity: 0.8;
+        }
+
+        /* Responsive design for tablets and mobile devices */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.6rem;
+                letter-spacing: 4px;
+            }
+            .axe-container {
+                width: 260px;
+                height: 260px;
+                margin-bottom: 30px;
+            }
+            .axe-image {
+                width: 190px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.0rem;
+                letter-spacing: 3px;
+            }
+            p {
+                font-size: 0.8rem;
+                letter-spacing: 3px;
+            }
+            .axe-container {
+                width: 220px;
+                height: 220px;
+                margin-bottom: 20px;
+            }
+            .axe-image {
+                width: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating sparks -->
+    <div class="ember" style="left: 15%; animation-delay: 0s; animation-duration: 12s;"></div>
+    <div class="ember" style="left: 35%; animation-delay: 4s; animation-duration: 16s;"></div>
+    <div class="ember" style="left: 50%; animation-delay: 2s; animation-duration: 13s;"></div>
+    <div class="ember" style="left: 72%; animation-delay: 7s; animation-duration: 15s;"></div>
+    <div class="ember" style="left: 88%; animation-delay: 1s; animation-duration: 11s;"></div>
+
+    <!-- Center Card -->
+    <div class="splash-card">
+        <div class="axe-container">
+            <img src="axe_premium.png" alt="Axe" class="axe-image">
+        </div>
+        <h1>SNIPERBOT</h1>
+        <p>Millisecond Precision</p>
+    </div>
+
+</body>
+</html>
